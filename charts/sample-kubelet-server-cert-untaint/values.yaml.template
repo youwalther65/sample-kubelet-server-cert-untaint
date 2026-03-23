@@ -1,3 +1,8 @@
+# -- Custom labels to add into metadata
+customLabels: {}
+
+podLabels: {}
+
 image:
   repository: "${IMAGE_REGISTRY}/${IMAGE_REPOSITORY}"
   tag: "${TAG}"

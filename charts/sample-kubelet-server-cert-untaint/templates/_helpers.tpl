@@ -29,6 +29,9 @@ app.kubernetes.io/name: {{ include "kubelet-server-cert-untaint.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 k8s-app: {{ include "kubelet-server-cert-untaint.name" . }}
+{{- if .Values.customLabels }}
+{{ toYaml .Values.customLabels }}
+{{- end }}
 {{- end }}
 
 {{/*
