@@ -7,5 +7,10 @@ build
 *.so
 *.dylib
 
+# these files will be created from template
+deploy/kubernetes/daemonset.yaml
+charts/sample-kubelet-server-cert-untaint/values.yaml
+charts/sample-kubelet-server-cert-untaint/Chart.yaml
+
 # Custom Helm values
 custom-values.yaml
