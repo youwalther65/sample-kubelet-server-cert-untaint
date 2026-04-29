@@ -41,6 +41,7 @@ type Config struct {
 	NodeName       string
 	CheckInterval  time.Duration
 	KubeconfigPath string
+	SkipCertCheck  bool
 }
 
 // These are set during build time via -ldflags.
@@ -60,6 +61,7 @@ func Load() *Config {
 	flag.IntVar(&checkIntervalSec, "check-interval", DefaultCheckIntervalSec, "The interval to check for kubelet certificate")
 
 	flag.StringVar(&cfg.KubeconfigPath, "kubeconfig", "", "absolute path to the kubeconfig file")
+	flag.BoolVar(&cfg.SkipCertCheck, "skip-cert-check", false, "Skip waiting for kubelet server certificate")
 
 	flag.Parse()
 
