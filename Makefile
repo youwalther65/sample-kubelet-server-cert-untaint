@@ -27,7 +27,7 @@ PKG=github.com/aws-samples/$(NAME)
 # Set IMAGE_REGISTRY to push to a custom registry (e.g., ghcr.io/aws, your-account.dkr.ecr.region.amazonaws.com)
 IMAGE_REGISTRY ?= public.ecr.aws/waltju
 IMAGE_REPOSITORY ?= kscu
-IMAGE_TAG ?= 1.8
+IMAGE_TAG ?= 1.9
 
 # Compute IMAGE_URI based on whether registry is set
 ifdef IMAGE_REGISTRY

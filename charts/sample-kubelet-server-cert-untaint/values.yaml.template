@@ -11,6 +11,7 @@ image:
 taintKey: "example.com/kubelet-no-server-cert"
 checkInterval: 5
 logLevel: 4
+skipCertCheck: false
 
 resources:
   limits:

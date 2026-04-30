@@ -71,9 +71,12 @@ helm install sample-kubelet-server-cert-untaint \
 #### Configuration
 
 Key Helm parameters:
-- `taintKey"`: The taint key to watch for and remove (default: `example.com/kubelet-no-server-cert`)
+- `taintKey`: The taint key to watch for and remove (default: `example.com/kubelet-no-server-cert`)
 - `checkInterval`: Interval in seconds to check for the certificate (default: `5`)
 - `logLevel`: Verbosity level for logging (default: `4`)
+- `skipCertCheck`: Skip kubelet certificate check (default: false)
+
+Note: With `skipCertCheck` set to `true`, kscu will skip the certificate check and immediately untaints node. That makes it possible to use kscu as a generic untainter. 
 
 ### Using kubectl
 

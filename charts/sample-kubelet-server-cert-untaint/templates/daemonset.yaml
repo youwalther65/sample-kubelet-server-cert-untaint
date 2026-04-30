@@ -31,6 +31,9 @@ spec:
         - {{ .Values.checkInterval | quote }}
         - -v
         - {{ .Values.logLevel | quote }}
+        {{- if .Values.skipCertCheck }}
+        - -skip-cert-check
+        {{- end }}
         env:
         - name: NODE_NAME
           valueFrom:
