@@ -33,6 +33,5 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:2023.11.20260413.0-minimal as linux-
 ARG PKG
 ARG BINARY
 ENV PKG=${PKG}
-ENV BINARY=${BINARY}
-COPY --from=builder /go/src/${PKG}/bin/${BINARY} /bin/${BINARY}
-ENTRYPOINT /bin/${BINARY}
+COPY --from=builder /go/src/${PKG}/bin/${BINARY} /bin/app
+ENTRYPOINT ["/bin/app"]
