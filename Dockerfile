@@ -35,4 +35,4 @@ ARG BINARY
 ENV PKG=${PKG}
 ENV BINARY=${BINARY}
 COPY --from=builder /go/src/${PKG}/bin/${BINARY} /bin/${BINARY}
-ENTRYPOINT ["/bin/${BINARY}"]
+ENTRYPOINT /bin/${BINARY}
