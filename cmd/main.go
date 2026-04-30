@@ -31,9 +31,8 @@ import (
 )
 
 func main() {
-	klog.InitFlags(nil)
-	util.SetupSignalHandler()
 	cfg := config.Load()
+	util.SetupSignalHandler()
 
 	clientSet, err := k8sclient.NewClientset(cfg.KubeconfigPath)
 	if err != nil {

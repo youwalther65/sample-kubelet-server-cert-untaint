@@ -49,25 +49,21 @@ var (
 	taintremoverVersion string
 	gitCommit           string
 	buildDate           string
+	checkIntervalSec    int
 )
 
 func Load() *Config {
 	cfg := &Config{}
 
+	klog.InitFlags(nil)
 	flag.StringVar(&cfg.TaintKey, "taint-key", os.Getenv(envTaintKey), "The taint key to watch for and remove")
 	flag.StringVar(&cfg.NodeName, "node-name", os.Getenv(envNodeName), "The nodename to watch for and remove the taint from")
-
-	var checkIntervalSec int
 	flag.IntVar(&checkIntervalSec, "check-interval", DefaultCheckIntervalSec, "The interval to check for kubelet certificate")
-
 	flag.StringVar(&cfg.KubeconfigPath, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.BoolVar(&cfg.SkipCertCheck, "skip-cert-check", false, "Skip waiting for kubelet server certificate")
 
-	// Debug: log before parsing
-	klog.InfoS("About to parse flags", "args", os.Args)
 	flag.Parse()
-	// Debug: log after parsing
-	klog.InfoS("Flags parsed", "parsed", flag.NArg())
+
 	klog.V(2).InfoS("Starting taint remover", "Version", taintremoverVersion, "GitCommit", gitCommit, "BuildDate", buildDate)
 
 	if cfg.TaintKey == "" {
