@@ -63,8 +63,11 @@ func Load() *Config {
 	flag.StringVar(&cfg.KubeconfigPath, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.BoolVar(&cfg.SkipCertCheck, "skip-cert-check", false, "Skip waiting for kubelet server certificate")
 
+	// Debug: log before parsing
+	klog.InfoS("About to parse flags", "args", os.Args)
 	flag.Parse()
-
+	// Debug: log after parsing
+	klog.InfoS("Flags parsed", "parsed", flag.NArg())
 	klog.V(2).InfoS("Starting taint remover", "Version", taintremoverVersion, "GitCommit", gitCommit, "BuildDate", buildDate)
 
 	if cfg.TaintKey == "" {
@@ -78,7 +81,7 @@ func Load() *Config {
 	}
 
 	cfg.CheckInterval = time.Duration(checkIntervalSec) * time.Second
-	klog.V(2).InfoS("Configuration", "node", cfg.NodeName, "taint", cfg.TaintKey, "check-interval", checkIntervalSec)
+	klog.V(2).InfoS("Configuration", "node", cfg.NodeName, "taint", cfg.TaintKey, "check-interval", checkIntervalSec, "skip-cert-check", cfg.SkipCertCheck)
 
 	return cfg
 }
