@@ -74,6 +74,8 @@ Key Helm parameters:
 - `taintKey`: The taint key to watch for and remove (default: `example.com/kubelet-no-server-cert`)
 - `checkInterval`: Interval in seconds to check for the certificate (default: `5`)
 - `startupJitter`: Max random delay in seconds before each pod contacts the apiserver, spreading DaemonSet boot load at scale to avoid throttling; `0` disables (default: `3`)
+- `taintWatcherDuration`: Overall wall-clock budget in seconds for removing the taint before giving up (default: `30`)
+- `certCheckDuration`: Max time in seconds to wait for the kubelet server certificate to appear (default: `75`)
 - `logLevel`: Verbosity level for logging (default: `4`)
 - `skipCertCheck`: Skip kubelet certificate check (default: false)
 
@@ -92,6 +94,8 @@ Key `kscu` command line parameters:
 - `taint-key"`: The taint key to watch for and remove (default: `example.com/kubelet-no-server-cert`)
 - `check-interval`: Interval in seconds to check for the certificate (default: `5`)
 - `startup-jitter`: Max random delay in seconds before contacting the apiserver, spreading DaemonSet boot load at scale to avoid throttling; `0` disables (default: `3`)
+- `taint-watcher-duration`: Overall wall-clock budget in seconds for removing the taint before giving up (default: `30`)
+- `cert-check-duration`: Max time in seconds to wait for the kubelet server certificate to appear (default: `75`)
 - `log-level`: Verbosity level for logging (default: `4`)
 - `skip-cert-check`: Skip kubelet certificate check (default: false)
 

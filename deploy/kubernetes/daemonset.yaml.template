@@ -39,6 +39,10 @@ spec:
         - "example.com/kubelet-no-server-cert"
         - -startup-jitter
         - "3"
+        - -taint-watcher-duration
+        - "30"
+        - -cert-check-duration
+        - "75"
         - -v
         - "4"
         env:

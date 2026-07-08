@@ -45,17 +45,17 @@ func main() {
 		os.Exit(1)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), config.KubeletServerCertCheckDuration)
+	ctx, cancel := context.WithTimeout(context.Background(), cfg.KubeletServerCertCheckDuration)
 	defer cancel()
 
 	if cfg.SkipCertCheck {
 		klog.V(2).InfoS("Skipping cert check, removing taint immediately", "node", cfg.NodeName, "taint", cfg.TaintKey)
-		taint.StartWatcher(clientSet, cfg.NodeName, cfg.TaintKey, config.TaintWatcherDuration)
+		taint.StartWatcher(clientSet, cfg.NodeName, cfg.TaintKey, cfg.TaintWatcherDuration)
 	} else if !certcheck.WaitForCert(ctx, cfg.CheckInterval) {
-		klog.ErrorS(nil, "Still no kubelet server certificate after timeout", "timeout", config.KubeletServerCertCheckDuration)
+		klog.ErrorS(nil, "Still no kubelet server certificate after timeout", "timeout", cfg.KubeletServerCertCheckDuration)
 	} else {
 		klog.V(2).InfoS("Running taint removal now", "node", cfg.NodeName, "taint", cfg.TaintKey)
-		taint.StartWatcher(clientSet, cfg.NodeName, cfg.TaintKey, config.TaintWatcherDuration)
+		taint.StartWatcher(clientSet, cfg.NodeName, cfg.TaintKey, cfg.TaintWatcherDuration)
 	}
 
 	klog.V(2).InfoS("No more work to be done - sleeping forever now")

@@ -31,6 +31,10 @@ spec:
         - {{ .Values.checkInterval | quote }}
         - -startup-jitter
         - {{ .Values.startupJitter | quote }}
+        - -taint-watcher-duration
+        - {{ .Values.taintWatcherDuration | quote }}
+        - -cert-check-duration
+        - {{ .Values.certCheckDuration | quote }}
         - -v
         - {{ .Values.logLevel | quote }}
         {{- if .Values.skipCertCheck }}

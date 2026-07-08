@@ -13,6 +13,10 @@ checkInterval: 5
 # Max random delay (seconds) before each pod contacts the apiserver. Spreads
 # DaemonSet boot load at scale to avoid apiserver throttling. Set to 0 to disable.
 startupJitter: 3
+# Overall wall-clock budget (seconds) for removing the taint before giving up.
+taintWatcherDuration: 30
+# Max time (seconds) to wait for the kubelet server certificate to appear.
+certCheckDuration: 75
 logLevel: 4
 skipCertCheck: false
 

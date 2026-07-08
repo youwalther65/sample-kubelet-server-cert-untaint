@@ -25,12 +25,12 @@ import (
 )
 
 const (
-	TaintWatcherDuration           = 30 * time.Second
-	KubeletServerCertCheckDuration = 75 * time.Second
-	DefaultCheckIntervalSec        = 5
-	DefaultStartupJitterSec        = 3
-	DefaultTaintKey                = "example.com/kubelet-no-server-cert"
-	DefaultKubeletCertFile         = "/var/lib/kubelet/pki/kubelet-server-current.pem"
+	DefaultTaintWatcherSec           = 30
+	DefaultKubeletServerCertCheckSec = 75
+	DefaultCheckIntervalSec          = 5
+	DefaultStartupJitterSec          = 3
+	DefaultTaintKey                  = "example.com/kubelet-no-server-cert"
+	DefaultKubeletCertFile           = "/var/lib/kubelet/pki/kubelet-server-current.pem"
 
 	envNodeName      = "NODE_NAME"
 	envTaintKey      = "TAINT_KEY"
@@ -38,12 +38,14 @@ const (
 )
 
 type Config struct {
-	TaintKey       string
-	NodeName       string
-	CheckInterval  time.Duration
-	StartupJitter  time.Duration
-	KubeconfigPath string
-	SkipCertCheck  bool
+	TaintKey                       string
+	NodeName                       string
+	CheckInterval                  time.Duration
+	StartupJitter                  time.Duration
+	TaintWatcherDuration           time.Duration
+	KubeletServerCertCheckDuration time.Duration
+	KubeconfigPath                 string
+	SkipCertCheck                  bool
 }
 
 // These are set during build time via -ldflags.
@@ -53,6 +55,8 @@ var (
 	buildDate           string
 	checkIntervalSec    int
 	startupJitterSec    int
+	taintWatcherSec     int
+	certCheckSec        int
 )
 
 func Load() *Config {
@@ -63,6 +67,8 @@ func Load() *Config {
 	flag.StringVar(&cfg.NodeName, "node-name", os.Getenv(envNodeName), "The nodename to watch for and remove the taint from")
 	flag.IntVar(&checkIntervalSec, "check-interval", DefaultCheckIntervalSec, "The interval to check for kubelet certificate")
 	flag.IntVar(&startupJitterSec, "startup-jitter", DefaultStartupJitterSec, "Max random delay in seconds before contacting the apiserver, to spread DaemonSet boot load at scale (0 disables)")
+	flag.IntVar(&taintWatcherSec, "taint-watcher-duration", DefaultTaintWatcherSec, "Overall wall-clock budget in seconds for removing the taint before giving up")
+	flag.IntVar(&certCheckSec, "cert-check-duration", DefaultKubeletServerCertCheckSec, "Max time in seconds to wait for the kubelet server certificate to appear")
 	flag.StringVar(&cfg.KubeconfigPath, "kubeconfig", "", "absolute path to the kubeconfig file")
 	flag.BoolVar(&cfg.SkipCertCheck, "skip-cert-check", false, "Skip waiting for kubelet server certificate")
 
@@ -85,7 +91,20 @@ func Load() *Config {
 		startupJitterSec = 0
 	}
 	cfg.StartupJitter = time.Duration(startupJitterSec) * time.Second
-	klog.V(2).InfoS("Configuration", "node", cfg.NodeName, "taint", cfg.TaintKey, "check-interval", checkIntervalSec, "startup-jitter", startupJitterSec, "skip-cert-check", cfg.SkipCertCheck)
+
+	if taintWatcherSec <= 0 {
+		klog.V(2).InfoS("Invalid taint-watcher-duration - using default", "given", taintWatcherSec, "default", DefaultTaintWatcherSec)
+		taintWatcherSec = DefaultTaintWatcherSec
+	}
+	cfg.TaintWatcherDuration = time.Duration(taintWatcherSec) * time.Second
+
+	if certCheckSec <= 0 {
+		klog.V(2).InfoS("Invalid cert-check-duration - using default", "given", certCheckSec, "default", DefaultKubeletServerCertCheckSec)
+		certCheckSec = DefaultKubeletServerCertCheckSec
+	}
+	cfg.KubeletServerCertCheckDuration = time.Duration(certCheckSec) * time.Second
+
+	klog.V(2).InfoS("Configuration", "node", cfg.NodeName, "taint", cfg.TaintKey, "check-interval", checkIntervalSec, "startup-jitter", startupJitterSec, "taint-watcher-duration", taintWatcherSec, "cert-check-duration", certCheckSec, "skip-cert-check", cfg.SkipCertCheck)
 
 	return cfg
 }
