@@ -28,22 +28,23 @@ import (
 
 func WaitForCert(ctx context.Context, checkInterval time.Duration) bool {
 	start := time.Now()
-	ticker := time.NewTicker(time.Second)
+	ticker := time.NewTicker(checkInterval)
 	defer ticker.Stop()
 	klog.V(2).InfoS("Check kubelet server certificate", "interval", checkInterval)
 	var attempts int
 	for {
+		attempts++
+		if util.FileExists(config.DefaultKubeletCertFile) {
+			klog.V(4).InfoS("kubelet server certificate exists", "check", attempts, "elapsed", time.Since(start).String())
+			return true
+		}
+		klog.V(4).InfoS("Still no kubelet server certificate - re-trying", "check", attempts, "elapsed", time.Since(start).String())
+		// Wait one interval before the next check, but honor the overall
+		// deadline promptly instead of blocking on a context-blind sleep.
 		select {
 		case <-ctx.Done():
 			return false
 		case <-ticker.C:
-			attempts++
-			if util.FileExists(config.DefaultKubeletCertFile) {
-				klog.V(4).InfoS("kubelet server certificate exists", "check", attempts, "elapsed", time.Since(start).String())
-				return true
-			}
-			klog.V(4).InfoS("Still no kubelet server certificate - re-trying", "check", attempts, "elapsed", time.Since(start).String())
-			time.Sleep(checkInterval)
 		}
 	}
 }
