@@ -44,7 +44,7 @@ The `taintKey` needs to match the `startupTaints` from the Karpenter NodePool. T
 
 ```yaml
 taintKey: "example.org/kubelet-no-server-cert"
-checkInterval: 10
+certCheckInterval: 10
 
 nodeAffinity:
   requiredDuringSchedulingIgnoredDuringExecution:
@@ -72,7 +72,7 @@ helm install sample-kubelet-server-cert-untaint \
 
 Key Helm parameters:
 - `taintKey`: The taint key to watch for and remove (default: `example.com/kubelet-no-server-cert`)
-- `checkInterval`: Interval in seconds to check for the certificate (default: `5`)
+- `certCheckInterval`: Interval in seconds to check for the certificate (default: `5`)
 - `startupJitter`: Max random delay in seconds before each pod contacts the apiserver, spreading DaemonSet boot load at scale to avoid throttling; `0` disables (default: `3`)
 - `taintWatcherDuration`: Overall wall-clock budget in seconds for removing the taint before giving up (default: `30`)
 - `certCheckDuration`: Max time in seconds to wait for the kubelet server certificate to appear (default: `75`)
@@ -92,7 +92,7 @@ The manifests work together with a NodePool `sample` from above.
 
 Key `kscu` command line parameters:
 - `taint-key"`: The taint key to watch for and remove (default: `example.com/kubelet-no-server-cert`)
-- `check-interval`: Interval in seconds to check for the certificate (default: `5`)
+- `cert-check-interval`: Interval in seconds to check for the certificate (default: `5`)
 - `startup-jitter`: Max random delay in seconds before contacting the apiserver, spreading DaemonSet boot load at scale to avoid throttling; `0` disables (default: `3`)
 - `taint-watcher-duration`: Overall wall-clock budget in seconds for removing the taint before giving up (default: `30`)
 - `cert-check-duration`: Max time in seconds to wait for the kubelet server certificate to appear (default: `75`)
@@ -119,7 +119,7 @@ It should look like:
 ```bash
 $ kubectl logs -n kube-system kubelet-server-cert-untaint-<redacted>
 I0707 09:30:17.157817       1 config.go:71] "Starting taint remover" Version="1.1.0" GitCommit="0346747c0b84f314ccc0e7042a7b3e9852825e96" BuildDate="2026-07-07T08:58:05+00:00"
-I0707 09:30:17.157906       1 config.go:88] "Configuration" node="i-<redacted>" taint="example.com/kubelet-no-server-cert" check-interval=5 startup-jitter=3 skip-cert-check=false
+I0707 09:30:17.157906       1 config.go:88] "Configuration" node="i-<redacted>" taint="example.com/kubelet-no-server-cert" cert-check-interval=5 startup-jitter=3 skip-cert-check=false
 I0707 09:30:17.752291       1 util.go:45] "Applying startup jitter before contacting apiserver" delay="976.633554ms" max="3s"
 I0707 09:30:18.729447       1 envvar.go:172] "Feature gate default state" feature="InOrderInformersBatchProcess" enabled=true
 I0707 09:30:18.729481       1 envvar.go:172] "Feature gate default state" feature="InformerResourceVersion" enabled=true

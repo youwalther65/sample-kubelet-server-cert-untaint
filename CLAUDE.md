@@ -61,7 +61,7 @@ There is **no test suite** in this repo (no `*_test.go` files). `make build` run
 Flags (and env equivalents) — see `pkg/config/config.go`:
 - `-taint-key` / `TAINT_KEY` — taint to remove (default `example.com/kubelet-no-server-cert`).
 - `-node-name` / `NODE_NAME` — **required**; in the DaemonSet it comes from `spec.nodeName` via the downward API.
-- `-check-interval` — cert poll interval seconds (default 5).
+- `-cert-check-interval` — cert poll interval seconds (default 5).
 - `-startup-jitter` — max random boot delay seconds before contacting the apiserver (default 3, 0 disables).
 - `-taint-watcher-duration` — overall taint-removal wall-clock budget seconds (default 30).
 - `-cert-check-duration` — max cert-wait seconds (default 75).

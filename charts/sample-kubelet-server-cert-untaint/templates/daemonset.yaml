@@ -27,8 +27,8 @@ spec:
         args:
         - -taint-key
         - {{ .Values.taintKey | quote }}
-        - -check-interval
-        - {{ .Values.checkInterval | quote }}
+        - -cert-check-interval
+        - {{ .Values.certCheckInterval | quote }}
         - -startup-jitter
         - {{ .Values.startupJitter | quote }}
         - -taint-watcher-duration

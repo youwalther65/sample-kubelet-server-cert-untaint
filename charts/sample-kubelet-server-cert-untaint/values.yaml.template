@@ -9,7 +9,7 @@ image:
   pullPolicy: IfNotPresent
 
 taintKey: "example.com/kubelet-no-server-cert"
-checkInterval: 5
+certCheckInterval: 5
 # Max random delay (seconds) before each pod contacts the apiserver. Spreads
 # DaemonSet boot load at scale to avoid apiserver throttling. Set to 0 to disable.
 startupJitter: 3
