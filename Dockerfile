@@ -28,7 +28,7 @@ ARG COMMIT
 ARG DATE
 RUN --mount=type=cache,target=/gomodcache --mount=type=cache,target=/gocache OS=$TARGETOS ARCH=$TARGETARCH make build
 
-FROM public.ecr.aws/amazonlinux/amazonlinux:2023.12.20260629.0-minimal AS linux-al2023
+FROM public.ecr.aws/amazonlinux/amazonlinux:2023.12.20260706.1-minimal AS linux-al2023
 ARG PKG
 ARG BINARY
 ENV PKG=${PKG}
