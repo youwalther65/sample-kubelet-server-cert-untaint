@@ -32,9 +32,11 @@ const (
 	DefaultTaintKey                  = "example.com/kubelet-no-server-cert"
 	DefaultKubeletCertFile           = "/var/lib/kubelet/pki/kubelet-server-current.pem"
 
-	envNodeName      = "NODE_NAME"
-	envTaintKey      = "TAINT_KEY"
-	envCheckInterval = "CERT_CHECK_INTERVAL"
+	// envNodeName is the one env var kscu reads. The pod's own node name is
+	// injected via the downward API (spec.nodeName), which can only populate an
+	// env var or a file, never a command-line arg -- so node-name is structurally
+	// env-sourced. Every other setting is a flag only; do not add env fallbacks.
+	envNodeName = "NODE_NAME"
 )
 
 type Config struct {
@@ -63,7 +65,7 @@ func Load() *Config {
 	cfg := &Config{}
 
 	klog.InitFlags(nil)
-	flag.StringVar(&cfg.TaintKey, "taint-key", os.Getenv(envTaintKey), "The taint key to watch for and remove")
+	flag.StringVar(&cfg.TaintKey, "taint-key", DefaultTaintKey, "The taint key to watch for and remove")
 	flag.StringVar(&cfg.NodeName, "node-name", os.Getenv(envNodeName), "The nodename to watch for and remove the taint from")
 	flag.IntVar(&certCheckIntervalSec, "cert-check-interval", DefaultCertCheckIntervalSec, "The interval to check for kubelet certificate")
 	flag.IntVar(&startupJitterSec, "startup-jitter", DefaultStartupJitterSec, "Max random delay in seconds before contacting the apiserver, to spread DaemonSet boot load at scale (0 disables)")

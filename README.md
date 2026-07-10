@@ -99,6 +99,8 @@ Key `kscu` command line parameters:
 - `log-level`: Verbosity level for logging (default: `4`)
 - `skip-cert-check`: Skip kubelet certificate check (default: false)
 
+All settings are command-line flags. The one exception is the node name, which is read from the `NODE_NAME` environment variable: in the DaemonSet it is injected from `spec.nodeName` via the downward API, which can only populate an env var, not a flag.
+
 Note: With `skip-cert-check` command line parameter set or Helm parameter `skipCertCheck` set to `true`, `kscu` will skip the certificate check and immediately untaints node. That makes it possible to use `kscu` as a generic untainter. 
 
 ## Testing
