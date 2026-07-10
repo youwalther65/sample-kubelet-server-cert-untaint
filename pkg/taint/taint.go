@@ -68,7 +68,8 @@ func remove(ctx context.Context, clientset *kubernetes.Clientset, node *corev1.N
 		return err
 	}
 
-	_, err = clientset.CoreV1().Nodes().Patch(ctx, node.Name, k8stypes.JSONPatchType, patch, metav1.PatchOptions{})
+	// FieldManager attributes this change to kscu in the node's managedFields for auditability.
+	_, err = clientset.CoreV1().Nodes().Patch(ctx, node.Name, k8stypes.JSONPatchType, patch, metav1.PatchOptions{FieldManager: "kscu"})
 	if err != nil {
 		return err
 	}
